@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { Todo, TodoStore } from './todo.store';
+import { TodoStore, Todo } from './todo.store';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styles: []
+  templateUrl: 'app.component.html'
 })
 export class AppComponent {
   newTodoText: string;
-  constructor(public store: TodoStore) { }
+
+  constructor(public store: TodoStore) {  }
 
   addTodo() {
     if (this.newTodoText.trim().length) {
@@ -19,6 +19,10 @@ export class AppComponent {
 
   toggleCompletion(todo: Todo) {
     this.store.complete(todo);
+  }
+
+  remove(todo: Todo) {
+    this.store.remove(todo);
   }
 
   editTodo(todo: Todo) {
@@ -32,9 +36,5 @@ export class AppComponent {
   completeEditing(todo: Todo, editedTitle: string) {
     todo.title = editedTitle;
     this.store.update(todo);
-  }
-
-  remove(todo: Todo) {
-    this.store.remove(todo);
   }
 }

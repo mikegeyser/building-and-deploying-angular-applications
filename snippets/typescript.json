@@ -1,0 +1,323 @@
+{
+	/*
+	// Place your snippets for TypeScript here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	"Print to console": {
+		"prefix": "log",
+		"body": [
+			"console.log('$1');",
+			"$2"
+		],
+		"description": "Log output to console"
+	}
+*/
+	"The todo store skeleton": {
+		"prefix": "demo-store",
+		"body": [
+			"import { Injectable } from '@angular/core';",
+			"import { Observable } from 'rxjs/Observable';",
+			"",
+			"export class Todo {",
+			"  id?: string;",
+			"  title?: string;",
+			"  completed?: boolean;",
+			"",
+			"  constructor(title: string) {",
+			"    this.completed = false;",
+			"    this.title = title.trim();",
+			"  }",
+			"}",
+			"",
+			"@Injectable()",
+			"export class TodoStore {",
+			"  todos: Todo[] = [new Todo(\"This is a test?\")];",
+			"",
+			"  constructor() { }",
+			"}"
+		],
+		"description": "The todo store skeleton"
+	},
+	"Adding the todo api import to the store": {
+		"prefix": "demo-store-import-firebase",
+		"body": [
+			"import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';"
+		],
+		"description": "Adding the firebase import to the store"
+	},
+	"Loading the todos from the api": {
+		"prefix": "demo-store-todos",
+		"body": [
+			"  todos: FirebaseListObservable<Todo[]>;",
+			"",
+			"  constructor(private db: AngularFireDatabase) {",
+			"    this.todos = db.list('/todos');",
+			"  }"
+		],
+		"description": "Loading the todos from firebase"
+	},
+	"Import firebase into module": {
+		"prefix": "demo-module-import",
+		"body": [
+			"import { AngularFireModule } from 'angularfire2';",
+			"import { AngularFireDatabaseModule } from 'angularfire2/database';",
+			"import { environment } from '../environments/environment';"
+		],
+		"description": "Import firebase into module"
+	},
+	"Set firebase imports in module": {
+		"prefix": "demo-module-set-imports",
+		"body": [
+			"imports: [",
+			" BrowserModule,",
+			" FormsModule,",
+			" HttpModule,",
+			" AngularFireModule.initializeApp(environment.firebase),",
+			" AngularFireDatabaseModule",
+			"],"
+		],
+		"description": "Set firebase imports in module"
+	},
+	"Configure firebase in environments settings": {
+		"prefix": "demo-environment-firebase",
+		"body": [
+			"  firebase: {",
+			"    apiKey: \"AIzaSyAZ9W3MpydRaIZt8RUBLA9Ag7uajjbdrwg\",",
+			"    authDomain: \"coded-in-braam.firebaseapp.com\",",
+			"    databaseURL: \"https://coded-in-braam.firebaseio.com\",",
+			"    projectId: \"coded-in-braam\",",
+			"    storageBucket: \"coded-in-braam.appspot.com\",",
+			"    messagingSenderId: \"871071533911\"",
+			"  }"
+		],
+		"description": "Configure firebase in environments settings"
+	},
+	"Add todo in component": {
+		"prefix": "demo-component-add",
+		"body": [
+			"addTodo(){",
+			"  if (this.newTodoText.trim().length) {",
+			"    this.store.add(this.newTodoText);",
+			"    this.newTodoText = '';",
+			"  }",
+			"}"
+		],
+		"description": "Add todo in component"
+	},
+	"Add todo in store": {
+		"prefix": "demo-store-add",
+		"body": [
+			"add(title: string) {", 
+			" let todo = new Todo(title);", 
+			" this.todos.push(todo);", 
+			"}" 
+		],
+		"description": "Add todo in store"
+	},
+	"Complete todo in component": {
+		"prefix": "demo-component-complete",
+		"body": [
+			"toggleCompletion(todo: Todo) {",
+			" this.store.complete(todo);",
+			"}"
+		],
+		"description": "Complete todo in component"
+	},
+	"Complete todo in store": {
+		"prefix": "demo-store-complete",
+		"body": [
+			" complete(todo: Todo) {",
+			"   todo.completed = true;",
+			"   this.db.object(`/todos/\\${todo.\\$key\\}`).update(todo);",
+			" }"
+		],
+		"description": "Complete todo in store"
+	},
+	"Edit todo in component - 1": {
+		"prefix": "demo-component-edit1",
+		"body": [
+			"editTodo(todo: Todo) {",
+			"  todo.editing = true;",
+			"}"
+		],
+		"description": "Edit todo in component (begin editing)"
+	},
+	"Edit todo in component - 2": {
+		"prefix": "demo-component-edit2",
+		"body": [
+			"cancelEditingTodo(todo: Todo) {",
+			"  todo.editing = false;",
+			"}"
+		],
+		"description": "Edit todo in component (cancel editing)"
+	},
+	"Edit todo in component - 3": {
+		"prefix": "demo-component-edit3",
+		"body": [
+			"completeEditing(todo: Todo, editedTitle: string) {",
+			"  todo.title = editedTitle;",
+			"  this.store.update(todo);",
+			"}"
+		],
+		"description": "Edit todo in component (complete editing)"
+	},
+	"Edit todo in store": {
+		"prefix": "demo-store-edit",
+		"body": [
+			"  update(todo: Todo) {",
+			"    todo.editing = false;",
+			"    this.db.object(`/todos/\\${todo.\\$key\\}`).update(todo);",
+			"  }"
+		],
+		"description": "Edit todo in store"
+	},
+	"Delete todo in component": {
+		"prefix": "demo-component-delete",
+		"body": [
+			"remove(todo: Todo) {",
+			" this.store.remove(todo);",
+			"}"
+		],
+		"description": "Delete todo in component"
+	},
+	"Delete todo in store": {
+		"prefix": "demo-store-delete",
+		"body": [
+			"remove(todo: Todo) {",
+			"  this.todos.remove(todo.\\$key);",
+			"}"
+		],
+		"description": "Delete todo in store"
+	},
+	"Module Complete": {
+		"prefix": "demo-module-final",
+		"body": [
+			"import { BrowserModule } from '@angular/platform-browser';",
+			"import { NgModule } from '@angular/core';",
+			"import { FormsModule } from '@angular/forms';",
+			"import { HttpModule } from '@angular/http';",
+			"import { AngularFireModule } from 'angularfire2';",
+			"import { AngularFireDatabaseModule } from 'angularfire2/database';",
+			"import {environment} from '../environments/environment';",
+			"",
+			"import { AppComponent } from './app.component';",
+			"import { TodoStore } from './todo.store';",
+			"",
+			"@NgModule({",
+			"  declarations: [",
+			"    AppComponent",
+			"  ],",
+			"  imports: [",
+			"    BrowserModule,",
+			"    FormsModule,",
+			"    HttpModule,",
+			"    AngularFireModule.initializeApp(environment.firebase),",
+			"    AngularFireDatabaseModule",
+			"  ],",
+			"  providers: [",
+			"    TodoStore",
+			"  ],",
+			"  bootstrap: [AppComponent]",
+			"})",
+			"export class AppModule { }"
+		],
+		"description": "Module Complete"
+	},
+	"Component Complete": {
+		"prefix": "demo-component-final",
+		"body": [
+			"import { Component } from '@angular/core';",
+			"import { TodoStore, Todo } from './todo.store';",
+			"",
+			"@Component({",
+			"  selector: 'app-root',",
+			"  templateUrl: 'app.component.html'",
+			"})",
+			"export class AppComponent {",
+			"  newTodoText: string;",
+			"",
+			"  constructor(public store: TodoStore) { }",
+			"",
+			"  addTodo() {",
+			"    if (this.newTodoText.trim().length) {",
+			"      this.store.add(this.newTodoText);",
+			"      this.newTodoText = '';",
+			"    }",
+			"  }",
+			"",
+			"  toggleCompletion(todo: Todo) {",
+			"    this.store.complete(todo);",
+			"  }",
+			"",
+			"  remove(todo: Todo) {",
+			"    this.store.remove(todo);",
+			"  }",
+			"",
+			"  editTodo(todo: Todo) {",
+			"    todo.editing = true;",
+			"  }",
+			"",
+			"  cancelEditingTodo(todo: Todo) {",
+			"    todo.editing = false;",
+			"  }",
+			"",
+			"  completeEditing(todo: Todo, editedTitle: string) {",
+			"    todo.title = editedTitle;",
+			"    this.store.update(todo);",
+			"  }",
+			"}"
+		],
+		"description": "Component Complete"
+	},
+	"Store Complete": {
+		"prefix": "demo-store-final",
+		"body": [
+			"import { Injectable } from '@angular/core';",
+			"import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';",
+			"",
+			"export class Todo {",
+			"  $key?: string;",
+			"  title?: string;",
+			"  completed?: boolean;",
+			"  editing?: boolean;",
+			"",
+			" constructor(title: string) {",
+			"   this.completed = false;",
+			"   this.editing = false;",
+			"   this.title = title.trim();",
+			" }",
+			"}",
+			"",
+			"@Injectable()",
+			"export class TodoStore {",
+			" todos: FirebaseListObservable<Todo[]>;",
+			"",
+			" constructor(private db: AngularFireDatabase) {",
+			"   this.todos = db.list('/todos');",
+			" }",
+			"",
+			" add(title: string) {",
+			"   let todo = new Todo(title);",
+			"   this.todos.push(todo);",
+			" }",
+			"",
+			" remove(todo: Todo) {",
+			"   this.todos.remove(todo.$key);",
+			" }",
+			"",
+			" complete(todo: Todo) {",
+			"   todo.completed = true;",
+			"   this.update(todo);",
+			" }",
+			"",
+			" update(todo: Todo) {",
+			"   todo.editing = false;",
+			"   this.db.object(`/todos/${todo.$key}`).update(todo);",
+			" }",
+			"}"
+		],
+		"description": "Store Complete"
+	}
+}
