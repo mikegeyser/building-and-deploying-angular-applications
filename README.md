@@ -166,7 +166,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 ```
 
-> demo-module-providers
+> demo-module-set-imports
 ```TypeScript
   imports: [
     BrowserModule,
