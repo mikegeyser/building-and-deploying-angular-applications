@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Todo, TodoStore } from './todo.store';
 
 @Component({
   selector: 'app-root',
@@ -7,34 +6,5 @@ import { Todo, TodoStore } from './todo.store';
   styles: []
 })
 export class AppComponent {
-  newTodoText: string;
-  constructor(public store: TodoStore) { }
-
-  addTodo() {
-    if (this.newTodoText.trim().length) {
-      this.store.add(this.newTodoText);
-      this.newTodoText = '';
-    }
-  }
-
-  toggleCompletion(todo: Todo) {
-    this.store.complete(todo);
-  }
-
-  editTodo(todo: Todo) {
-    todo.editing = true;
-  }
-
-  cancelEditingTodo(todo: Todo) {
-    todo.editing = false;
-  }
-
-  completeEditing(todo: Todo, editedTitle: string) {
-    todo.title = editedTitle;
-    this.store.update(todo);
-  }
-
-  remove(todo: Todo) {
-    this.store.remove(todo);
-  }
+  title = 'app works!';
 }

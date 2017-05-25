@@ -12,7 +12,7 @@
   > ng new todo --directory demo --inline-style --skip-tests --skip-install
   > cd demo/
   > rm -rf e2e/ karma.conf.js protractor.conf.js README.md
-  > yarn install
+  > npm install
   > ng serve
 ```
 
@@ -137,7 +137,9 @@ export class AppComponent {
 ```
 
 ```bash
+  > firebase login
   > firebase init
+  $ firebase init
 ```
 
 ```bash
