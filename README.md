@@ -1,8 +1,18 @@
+# Building and Deploying Angular Applications
+
+<img align="left" src="https://secure.meetupstatic.com/photos/event/6/e/3/e/global_133288222.jpeg">
+
+[A talk for the Coded-In-Braam meetup on 27 May 2017](https://www.meetup.com/CodedInBraam/events/239689672/).
+
+In the world of JavaScript, things have become more complicated. There are a lot of moving parts in a modern single page application that make building, debugging and ultimately deploying seem like a significant challenge. There are very good reasons behind this complexity, however. Modern frameworks, such as Angular, have created rich and featureful tool chains that make the process much easier.
+
+Using Angular, we will show you how to use modern tooling to simplify the building and debugging of an application - including using TypeScript, the Angular CLI, WebPack, Visual Studio Code and Chrome Developer Tools. We will then look at different ways of deploying the application, such as to Firebase CDN and GitHub Pages - and the pros and cons of each.
+
 # Setup
 ## Install @angular/cli
 
 ```bash
-  > npm install -g @angular/cli
+  > npm install --global @angular/cli
   > ng help
 ```
 
@@ -133,7 +143,7 @@ export class AppComponent {
 [https://firebase.google.com/](https://firebase.google.com/)
 
 ```bash
-  > npm install -g firebase-tools
+  > npm install --global firebase-tools
 ```
 
 ```bash
@@ -143,7 +153,7 @@ export class AppComponent {
 ```
 
 ```bash
-  > npm install firebase angularfire2 --save
+  > npm install --save firebase angularfire2 promise-polyfill
 ```
 
 #### src/app/todo.store.ts
