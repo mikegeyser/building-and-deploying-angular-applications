@@ -13,6 +13,8 @@ Using Angular, we will show you how to use modern tooling to simplify the buildi
 # Setup
 ## Install @angular/cli
 
+The first thing we have to do is install the `@angular/cli` globally to make use of the scaffolding on the terminal.
+
 ```bash
   > npm install --global @angular/cli
   > ng help
@@ -20,6 +22,9 @@ Using Angular, we will show you how to use modern tooling to simplify the buildi
 
 ## Scaffold out new project
 
+We can scaffold out the project using a number of optional switches to tweak our defaults, but in this case we will try and generate the simplest possible base project.
+
+In this we are only using the `@angular/cli` minimally to generate and build the project, to find out more go take a look at: [https://cli.angular.io/](https://cli.angular.io/)
 ```bash
   > ng new todo --directory demo --inline-style --skip-tests --skip-install
   > cd demo/
@@ -32,11 +37,17 @@ Browse to [http://localhost:4200/](http://localhost:4200/)
 
 ## Update to include the styling on `index.html`
 
+This application is going to follow along with one of my favourite front-end code katas, namely TodoMVC. 
+We will be building a simple Todo Application with a predefined set of functionality.
+To concentrate on the building of the application, rather than fiddling with the appearance, the custodians have made their CSS available as an `npm` package - which we're going to install below.
+
 ```bash
   > npm install --save todomvc-app-css todomvc-common
 ```
 
 #### .angular-cli.json
+
+In order for the `@angular/cli` (or rather WebPack, that's embedded in the cli) to push the styles to the page, we need to add it to the external styles section of the `.angular-cli.json` config file.
 ```json
     "styles": [
       "styles.css",
@@ -45,9 +56,16 @@ Browse to [http://localhost:4200/](http://localhost:4200/)
     ],
 ```
 
+Now if you look at the application, the styles should be updated!
+
 # List the todos
+
+The first thing we are going to do is display the todos as a list.
+
 ## Create the store
 #### src/app/todo.store.ts
+We need to create an abstraction layer for the todo data storage, so we create an `angular` injected service that's going to do this for us.
+
 > demo-store
 ```TypeScript
 import { Injectable } from '@angular/core';
@@ -73,6 +91,9 @@ export class TodoStore {
 ```
 
 #### src/app/app.module.ts
+
+We then need to `import` the `TodoStore` and register it as a `provider` for the application's root module.
+
 ```TypeScript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -99,6 +120,9 @@ export class AppModule { }
 ```
 
 #### src/app/app.component.ts
+
+We can then use the `TodoStore` by injecting it into the constructor of the `AppComponent` and marking it as public, which is a shortcut that will create it as a `property` on the component.
+
 ```TypeScript
 import { Component } from '@angular/core';
 import { TodoStore, Todo } from './todo.store';
@@ -114,6 +138,9 @@ export class AppComponent {
 ```
 
 #### src/app/app.component.html
+
+Next, we create some simple markup that's the standard container structure for the `TodoMVC` kata. 
+Importantly, iterate over the todos array from the `TodoStore` directly by using an `*ngFor` directive, and print the title using the handlebar notation `{{todo.title}}`.
 > demo-html-skeleton
 ```html
 <section class="todoapp">
@@ -142,27 +169,38 @@ export class AppComponent {
 
 ## Set up Firebase
 
-[https://firebase.google.com/](https://firebase.google.com/)
+For the next section, we are going to wire up *FireBase* as our back-end for the application.
+The instructions presented below are abbreviated to the bare minimum.
+If you'd like to see more detailed instructions, please go to: [https://firebase.google.com/docs/web/setup](https://firebase.google.com/docs/web/setup).
 
+> ## NB: You are going to have to sign up for an account at this stage, [if you leave it on *Spark* you won't be billed](https://firebase.google.com/pricing/).
+
+Install the firebase cli tools globally.
 ```bash
   > npm install --global firebase-tools
 ```
 
+Login to your account and then (from the app directory) initialise firebase.
 ```bash
   > firebase login
   > firebase init
-  $ firebase init
 ```
 
+Save the *angularfire 2* and supporting packages to the application, which will give us access to all of the cool firebase integration.
 ```bash
   > npm install --save firebase angularfire2 promise-polyfill
 ```
 
 #### src/app/todo.store.ts
+The first thing we'll do is `import` the relevant angularfire classes into our `TodoStore`.
 > demo-store-import-firebase
 ```TypeScript
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 ```
+
+Then we'll replace the `class` contents with the code below, changing the `todos` array to a `FirebaseListObservable`.
+We will need to inject an instance of the `AngularFireDatabase` client and will call list and give it the relative path to our `todos/` store.
+For those of you that have worked with any kind of AJAX or REST before, this _should_ feel like a RESTful endpoint (because it is).
 
 > demo-store-todos
 ```TypeScript
@@ -174,12 +212,14 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 ```
 
 #### src/app/app.module.ts
+The angular fire modules need to be imported in the root module.
 > demo-module-import-firebase
 ```TypeScript
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 ```
 
+And initialised with our firebase config in the `imports` section of the module.
 > demo-module-set-imports
 ```TypeScript
   imports: [
@@ -192,6 +232,8 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 ```
 
 #### src/environments/environments.ts
+We need to put our firebase token details somewhere, and the right place is in the `environments.ts` file.
+You'll find the details of these settings on your [firebase console](https://console.firebase.google.com/).
 > demo-environment-firebase
 ```TypeScript
   firebase: {
@@ -205,9 +247,14 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 ```
 
 ### src/app/app.component.html
+Lastly, we need to add an `async` pipe to our html, so that angular knows that it will need to wait for the `Observable` to fire before it starts rendering items.
+This is an incredibly powerful aspect of angular, although tricky to get to grips with.
 ```TypeScript
   *ngFor="let todo of store.todos | async" 
 ```
+
+And now you should have your `TodoMVC` app bound to a cloud db. 
+If you create todos in the console, you should see the list updated with them.
 
 # Add a todo
 
